@@ -94,6 +94,7 @@ history = model.fit(trainX, trainY, epochs=5, batch_size=16, validation_split=0.
 plt.plot(history.history['loss'], label='Training loss')
 plt.plot(history.history['val_loss'], label='Validation loss')
 plt.legend()
+plt.show()
 
 #Predicting...
 #Libraries that will help us extract only business days in the US.
@@ -128,9 +129,17 @@ df_forecast = pd.DataFrame({'Date':np.array(forecast_dates), 'Open':y_pred_futur
 df_forecast['Date']=pd.to_datetime(df_forecast['Date'])
 
 
-original = df[['Date', 'Open']]
-original['Date']=pd.to_datetime(original['Date'])
-original = original.loc[original['Date'] >= '2020-5-1']
+# original = df[['Date', 'Open']]
+data_cols = {}
+data_cols['Date'] = pd.to_datetime(df['Date'])
+data_cols['Open'] = df['Open']
+# original = pd.DataFrame({'Date' : pd.to_datetime(original['Date']) , })
+# original['DateTime']=pd.to_datetime(original['Date'])
+# new_original = original.loc[original['Date'] >= '2020-5-1']
+data = pd.DataFrame(data_cols)
+data = data.loc[data['Date'] >= '2020-5-1']
 
-sns.lineplot(original['Date'], original['Open'])
-sns.lineplot(df_forecast['Date'], df_forecast['Open'])
+# sns.lineplot(original['Date'], original['Open'])
+sns.lineplot(data=data, x='Date', y='Open')
+# plt.plot(data['Date'], data['Open'])
+sns.lineplot(data=df_forecast, x='Date', y='Open')
